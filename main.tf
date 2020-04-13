@@ -47,17 +47,6 @@ terraform {
   }
 }
 
-module "bootstrap" {
-  source                      = "./tf-mod/bootstrap"
-  name_of_s3_bucket           = "td-hva-tfstate"
-  dynamo_db_table_name        = "td-hva-aws-locks"
-  iam_user_name               = "IamUser"
-  ado_iam_role_name           = "IamRole"
-  aws_iam_policy_permits_name = "IamPolicyPermits"
-  aws_iam_policy_assume_name  = "IamPolicyAssume"
-}
-
-
 // AWS Provider
 
 provider "aws" {
