@@ -48,7 +48,7 @@ terraform {
 }
 
 module "bootstrap" {
-  source                      = "tf-mod/bootstrap"
+  source                      = "./tf-mod/bootstrap"
   name_of_s3_bucket           = "td-hva-tfstate"
   dynamo_db_table_name        = "td-hva-aws-locks"
   iam_user_name               = "IamUser"
