@@ -27,6 +27,12 @@ variable "tenant_domain" {
 variable "luminate_user" {
   default = "ikbennietgek@ikbeneenvliegtuig.nl"
 }
+variable "git_repo" {
+  default = ""
+}
+variable "git_branch" {
+  default = ""
+}
 
 // AWS Provider
 
@@ -54,6 +60,8 @@ data "template_file" "fixtures-config" {
   template = file("tf-tpl/config-node.sh.tpl")
   vars = {
     connector_command = luminate_connector.connector.command
+    git_repo = var.git_repo
+    git_branch = var.git_branch
   }
 }
 
