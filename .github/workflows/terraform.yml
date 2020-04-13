@@ -52,7 +52,16 @@ jobs:
         TF_VAR_git_repo: ${{ github.repository }}
         TF_VAR_git_branch: ${{ github.head_ref }}
     - name: Terraform output
-      run: export SITE_URL="$(terraform output nginx-demo-url)"
+      run: |
+        export SITE_URL="$(terraform output nginx-demo-url)"
+        export PULL_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        curl --request POST \
+        --url https://api.github.com/repos/${{ github.repository }}/issues/$PULL_NUMBER/comments \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json' \
+        --data '{
+          "body": "Please visit the current build at $SITE_URL"
+          }'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -60,10 +69,3 @@ jobs:
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
         TF_VAR_git_repo: ${{ github.repository }}
         TF_VAR_git_branch: ${{ github.head_ref }}
-    - name: Add PR Comment
-      uses: mshick/add-pr-comment@v1
-      with:
-        message: $SITE_URL
-        repo-token: ${{ secrets.TF_GH_TOKEN }}
-      env:
-        SITE_URL: $SITE_URL
