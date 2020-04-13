@@ -16,6 +16,8 @@ jobs:
           unzip terraform-provider-luminate-linux.zip
           rm terraform-provider-luminate-linux.zip
           ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+          echo ${GITHUB_WORKSPACE}
+          echo ${tf_working_dir}
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -31,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Check terraform-provider-luminate'
-        run: ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+        run: ls -lisahd ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
       - name: 'Terraform Validate'
         uses: hashicorp/terraform-github-actions@master
         with:
