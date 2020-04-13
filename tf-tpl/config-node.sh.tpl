@@ -19,7 +19,7 @@ apt-get install -y docker-ce
 
 apt-get install -y git
 mkdir -p /data/web
-git clone -b ${ git_branch } --single-branch git://github/coolhva/${ git_repo }.git /data/web/
+git clone -b ${ git_branch } --single-branch https://github.com/${ git_repo }.git /data/web/
 
 docker run -d -p 8080:80 -v /data/web:/usr/share/nginx/html:ro nginx
 
