@@ -45,3 +45,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
+    - name: Envtest
+      run: |
+        echo $GITHUB_REPOSITORY
+        echo $GITHUB_REF
+        echo $GITHUB_HEAD_REF
+        echo $GITHUB_BASE_REF
