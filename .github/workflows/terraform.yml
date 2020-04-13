@@ -1,4 +1,4 @@
-name: 'Terraform GitHub Actions'
+name: 'Validate changes via Terraform'
 on:
   - pull_request
 jobs:
@@ -6,37 +6,31 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@master
-      - name: 'Terraform Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.24
-          tf_actions_subcommand: 'fmt'
-        env:
-          tf_working_dir: "./"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terraform Init'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.24
-          tf_actions_subcommand: 'init'
-        env:
-          tf_working_dir: "./"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terraform Validate'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.24
-          tf_actions_subcommand: 'validate'
-        env:
-          tf_working_dir: "./"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Terraform Plan'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.12.24
-          tf_actions_subcommand: 'plan'
-        env:
-          tf_working_dir: "./"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v1
+    - name: Install Terraform
+      env:
+            TERRAFORM_VERSION: "0.12.24"
+      run: |
+        tf_version=$TERRAFORM_VERSION
+        wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+        unzip terraform_"$tf_version"_linux_amd64.zip
+        sudo mv terraform /usr/local/bin/
+    - name: 'Install terraform-provider-luminate'
+      run: |
+          mkdir -p .terraform/plugins/linux_amd64/
+          cd .terraform/plugins/linux_amd64/
+          curl -L https://github.com/Broadcom/terraform-provider-luminate/releases/latest/download/terraform-provider-luminate-linux.zip -o terraform-provider-luminate-linux.zip
+          unzip terraform-provider-luminate-linux.zip
+          rm terraform-provider-luminate-linux.zip
+    - name: Verify Terraform version
+      run: terraform --version
+    - name: Terraform init
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
+        LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
+      run: terraform init -input=false
+    - name: Terraform validation
+      run: terraform validate
+
