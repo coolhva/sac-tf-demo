@@ -37,7 +37,13 @@ jobs:
           tf_working_dir: "./"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Check terraform-provider-luminate'
-        run: ls -lisahd ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+        run: |
+          ls -lisahd ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+          cd ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+          curl -L https://github.com/Broadcom/terraform-provider-luminate/releases/latest/download/terraform-provider-luminate-linux.zip -o terraform-provider-luminate-linux.zip
+          unzip terraform-provider-luminate-linux.zip
+          rm terraform-provider-luminate-linux.zip
+          ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
       - name: 'Terraform Validate'
         uses: hashicorp/terraform-github-actions@master
         with:
