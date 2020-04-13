@@ -34,6 +34,17 @@ variable "git_branch" {
   default = ""
 }
 
+terraform {
+  required_version = ">=0.12.24"
+  backend "s3" {
+    bucket         = "td-hva-tfstate"
+    key            = "terraform.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "td-hva-aws-locks"
+    encrypt        = true
+  }
+}
+
 // AWS Provider
 
 provider "aws" {
