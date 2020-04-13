@@ -60,7 +60,7 @@ jobs:
         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
         --header 'content-type: application/json' \
         --data '{
-          "body": "Please visit the current build at $SITE_URL"
+          "body": "Please visit the current build at '"$SITE_URL"'"
           }'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
