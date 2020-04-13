@@ -15,6 +15,7 @@ jobs:
           curl -L https://github.com/Broadcom/terraform-provider-luminate/releases/latest/download/terraform-provider-luminate-linux.zip -o terraform-provider-luminate-linux.zip
           gunzip terraform-provider-luminate-linux.zip
           rm terraform-provider-luminate-linux.zip
+          ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -27,6 +28,21 @@ jobs:
         with:
           tf_actions_version: 0.12.24
           tf_actions_subcommand: 'init'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Install terraform-provider-luminate'
+        run: |
+          mkdir -p ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+          cd ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+          curl -L https://github.com/Broadcom/terraform-provider-luminate/releases/latest/download/terraform-provider-luminate-linux.zip -o terraform-provider-luminate-linux.zip
+          gunzip terraform-provider-luminate-linux.zip
+          rm terraform-provider-luminate-linux.zip
+          ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.24
+          tf_actions_subcommand: 'validate'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Terraform Plan'
