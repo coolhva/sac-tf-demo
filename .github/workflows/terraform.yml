@@ -30,6 +30,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
+        TF_VAR_git_repo: ${{ github.repository }}
+        TF_VAR_git_branch: ${{ github.head_ref }}
       run: terraform init -input=false
     - name: Terraform validation
       run: terraform validate
@@ -38,6 +40,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
+        TF_VAR_git_repo: ${{ github.repository }}
+        TF_VAR_git_branch: ${{ github.head_ref }}
     - name: Terraform plan
       run: terraform plan
       env:
@@ -45,9 +49,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
-    - name: Envtest
-      run: |
-        echo $GITHUB_REPOSITORY
-        echo $GITHUB_REF
-        echo $GITHUB_HEAD_REF
-        echo $GITHUB_BASE_REF
+        TF_VAR_git_repo: ${{ github.repository }}
+        TF_VAR_git_branch: ${{ github.head_ref }}
