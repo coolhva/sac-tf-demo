@@ -1,4 +1,4 @@
-name: 'Validate changes via Terraform'
+name: 'Destroy terraform when deleting a branch'
 on:
   - delete
 jobs:
