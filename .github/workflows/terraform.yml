@@ -53,10 +53,17 @@ jobs:
         TF_VAR_git_branch: ${{ github.head_ref }}
     - name: Terraform output
       run: export SITE_URL="$(terraform output nginx-demo-url)"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        LUMINATE_API_CLIENT_ID: ${{ secrets.LUMINATE_API_CLIENT_ID }}
+        LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
+        TF_VAR_git_repo: ${{ github.repository }}
+        TF_VAR_git_branch: ${{ github.head_ref }}
     - name: Add PR Comment
       uses: mshick/add-pr-comment@v1
       with:
-        message: Test
+        message: $SITE_URL
         repo-token: ${{ secrets.TF_GH_TOKEN }}
       env:
         SITE_URL: $SITE_URL
