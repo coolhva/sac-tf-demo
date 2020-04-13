@@ -15,6 +15,7 @@ jobs:
           curl -L https://github.com/Broadcom/terraform-provider-luminate/releases/latest/download/terraform-provider-luminate-linux.zip -o terraform-provider-luminate-linux.zip
           unzip terraform-provider-luminate-linux.zip
           rm terraform-provider-luminate-linux.zip
+          ls ${GITHUB_WORKSPACE}/${tf_working_dir}/.terraform/plugins/linux_amd64/
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
