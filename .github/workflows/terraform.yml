@@ -51,4 +51,12 @@ jobs:
         LUMINATE_API_CLIENT_SECRET: ${{ secrets.LUMINATE_API_CLIENT_SECRET }}
         TF_VAR_git_repo: ${{ github.repository }}
         TF_VAR_git_branch: ${{ github.head_ref }}
-
+    - name: Terraform output
+      run: export SITE_URL="$(terraform output nginx-demo-url)"
+    - name: Add PR Comment
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: Test
+        repo-token: ${{ secrets.TF_GH_TOKEN }}
+      env:
+        SITE_URL: $SITE_URL
