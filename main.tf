@@ -12,6 +12,9 @@
 variable "region" {
   default = "eu-central-1"
 }
+variable "vpc_id" {
+  default = "vpc-0f7d47b36beb4f382"
+}
 variable "subnet_id" {
   default = "subnet-07ffcb9652c58c186"
 }
@@ -52,6 +55,18 @@ terraform {
 provider "aws" {
   region = var.region
 }
+resource "aws_security_group" "only_allow_outbound" {
+  name        = "only_allow_outbound"
+  description = "Allow allow outbound traffic"
+  vpc_id      = var.vpc_id
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 
 resource "aws_instance" "vm" {
   ami           = var.ami_id
@@ -59,6 +74,7 @@ resource "aws_instance" "vm" {
   key_name      = var.ssh_key_name
   user_data     = data.template_file.user-data.rendered
   subnet_id     = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.only_allow_outbound.id]
 }
 
 data "template_file" "user-data" {
