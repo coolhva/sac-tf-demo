@@ -30,6 +30,11 @@ variable "tenant_domain" {
 variable "luminate_user" {
   default = "ikbennietgek@ikbeneenvliegtuig.nl"
 }
+
+variable "luminate_group" {
+  default = "Iedereen"
+}
+
 variable "git_repo" {
   default = ""
 }
@@ -120,6 +125,7 @@ resource "luminate_web_access_policy" "web-access-policy" {
   name                 = "web-access-policy"
   identity_provider_id = data.luminate_identity_provider.idp.identity_provider_id
   user_ids             = data.luminate_user.users.user_ids
+  group_ids            = data.luminate_group.groups.group_ids
   applications         = [luminate_web_application.nginx.id]
 }
 
@@ -130,6 +136,11 @@ data "luminate_identity_provider" "idp" {
 data "luminate_user" "users" {
   identity_provider_id = data.luminate_identity_provider.idp.identity_provider_id
   users                = [var.luminate_user]
+}
+
+data "luminate_group" "groups" {
+  identity_provider_id = data.luminate_identity_provider.idp.identity_provider_id
+  groups               = [var.luminate_group]
 }
 
 // Output variables
